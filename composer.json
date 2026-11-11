@@ -1,0 +1,32 @@
+{
+    "name": "alfacode-team/hkm-plugin-teams",
+    "description": "HKM Kernel plugin providing 'team.management' — teams, memberships with roles, invites and per-team preferences, with permissions delegated to hkm-plugin-authorization.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["hkm-kernel", "plugin", "php", "teams", "memberships", "invites", "team.management"],
+    "require": {
+        "php": ">=8.4",
+        "alfacode-team/php-service-platform": "dev-master",
+        "alfacode-team/hkm-plugin-authorization": "dev-main"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11 || ^12 || ^13"
+    },
+    "autoload": {
+        "psr-4": {
+            "Plugins\\Teams\\": ""
+        }
+    },
+    "repositories": [
+        { "type": "vcs", "url": "https://github.com/AlfaCode-Team/hkm-kernel" },
+        { "type": "vcs", "url": "https://github.com/AlfaCode-Team/hkm-plugin-authorization" },
+        { "type": "vcs", "url": "https://github.com/AlfaCode-Team/hkm-plugin-database" },
+        { "type": "vcs", "url": "https://github.com/AlfaCode-Team/http" },
+        { "type": "vcs", "url": "https://github.com/AlfaCode-Team/php-io-cli" },
+        { "type": "vcs", "url": "https://github.com/AlfaCode-Team/Let-Migrate" },
+        { "type": "vcs", "url": "https://github.com/hakrichTech/bindIt" },
+        { "type": "vcs", "url": "https://github.com/hakrichTech/type-alias" }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

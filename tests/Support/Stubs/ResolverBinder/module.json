@@ -1,0 +1,9 @@
+{
+    "name": "team-resolver-stub",
+    "version": "0.0.0",
+    "solves": "test.team-resolver",
+    "type": "module",
+    "requires": ["team.management", "authorization.policy"],
+    "exposes": [],
+    "config": []
+}

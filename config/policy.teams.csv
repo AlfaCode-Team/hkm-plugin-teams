@@ -1,0 +1,35 @@
+# Policy rows for hkm-plugin-teams.
+#
+# The Teams plugin has NO permission table of its own: what a team role may do is
+# these rows, evaluated by hkm-plugin-authorization. Team roles appear in the
+# policy as `team:<role>`, so they cannot collide with a seat role named `admin`.
+#
+# Load them into the policy store with
+#     hkm cli authz:seed --file=<path to this file>
+# or append them to the file AUTHZ_POLICY_FILE points at. With no rows loaded,
+# every team action but "create" and "leave" is refused: the failure is closed.
+#
+# Objects/actions: object is always `team`.
+#   read            see the team, its prefs, and (public roster) its members
+#   members.read    see the full roster when the team's privacy is `restricted`
+#   update          rename, change privacy, replace prefs
+#   delete          delete the team
+#   invite          list, create and revoke invites
+#   members.update  change another member's roles
+#   members.remove  remove another member
+#   owners.manage   anything that grants, removes or changes the `owner` role
+
+p, team:member, team, read
+
+p, team:admin, team, members.read
+p, team:admin, team, update
+p, team:admin, team, invite
+p, team:admin, team, members.update
+p, team:admin, team, members.remove
+
+p, team:owner, team, delete
+p, team:owner, team, owners.manage
+
+# Inheritance: an owner can do what an admin can, an admin what a member can.
+g, team:owner, team:admin
+g, team:admin, team:member

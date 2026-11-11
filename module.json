@@ -1,0 +1,53 @@
+{
+    "name": "teams",
+    "version": "0.1.0",
+    "kernel": "^1.19.0",
+    "solves": "team.management",
+    "type": "module",
+
+    "requires": ["database.management", "authorization.policy"],
+
+    "exposes": [
+        "Plugins\\Teams\\API\\Contracts\\TeamServiceContract",
+        "Plugins\\Teams\\API\\Contracts\\TeamMembershipContract"
+    ],
+
+    "lang": { "path": "resources/lang", "namespace": "teams", "global": false },
+
+    "routePrefix": "/api",
+    "routeFilters": ["auth"],
+
+    "routes": [
+        { "method": "GET",    "path": "/teams",                                      "handler": "Plugins\\Teams\\Infrastructure\\Http\\Controllers\\TeamController@index",         "name": "teams.index" },
+        { "method": "POST",   "path": "/teams",                                      "handler": "Plugins\\Teams\\Infrastructure\\Http\\Controllers\\TeamController@create",        "name": "teams.create" },
+        { "method": "GET",    "path": "/teams/{teamId:alphanum}",                    "handler": "Plugins\\Teams\\Infrastructure\\Http\\Controllers\\TeamController@show",          "name": "teams.show" },
+        { "method": "PATCH",  "path": "/teams/{teamId:alphanum}",                    "handler": "Plugins\\Teams\\Infrastructure\\Http\\Controllers\\TeamController@update",        "name": "teams.update" },
+        { "method": "DELETE", "path": "/teams/{teamId:alphanum}",                    "handler": "Plugins\\Teams\\Infrastructure\\Http\\Controllers\\TeamController@destroy",       "name": "teams.destroy" },
+        { "method": "GET",    "path": "/teams/{teamId:alphanum}/prefs",              "handler": "Plugins\\Teams\\Infrastructure\\Http\\Controllers\\TeamController@prefs",         "name": "teams.prefs" },
+        { "method": "PUT",    "path": "/teams/{teamId:alphanum}/prefs",              "handler": "Plugins\\Teams\\Infrastructure\\Http\\Controllers\\TeamController@updatePrefs",   "name": "teams.prefs.update" },
+        { "method": "GET",    "path": "/teams/{teamId:alphanum}/members",            "handler": "Plugins\\Teams\\Infrastructure\\Http\\Controllers\\TeamController@members",       "name": "teams.members" },
+        { "method": "PATCH",  "path": "/teams/{teamId:alphanum}/members/{userId:segment}", "handler": "Plugins\\Teams\\Infrastructure\\Http\\Controllers\\TeamController@changeRoles", "name": "teams.members.update" },
+        { "method": "DELETE", "path": "/teams/{teamId:alphanum}/members/{userId:segment}", "handler": "Plugins\\Teams\\Infrastructure\\Http\\Controllers\\TeamController@removeMember", "name": "teams.members.remove" },
+        { "method": "POST",   "path": "/teams/{teamId:alphanum}/leave",              "handler": "Plugins\\Teams\\Infrastructure\\Http\\Controllers\\TeamController@leave",         "name": "teams.leave" },
+        { "method": "GET",    "path": "/teams/{teamId:alphanum}/invites",            "handler": "Plugins\\Teams\\Infrastructure\\Http\\Controllers\\InviteController@index",       "name": "teams.invites" },
+        { "method": "POST",   "path": "/teams/{teamId:alphanum}/invites",            "handler": "Plugins\\Teams\\Infrastructure\\Http\\Controllers\\InviteController@create",      "name": "teams.invites.create" },
+        { "method": "DELETE", "path": "/teams/{teamId:alphanum}/invites/{inviteId:alphanum}", "handler": "Plugins\\Teams\\Infrastructure\\Http\\Controllers\\InviteController@revoke", "name": "teams.invites.revoke" },
+        { "method": "POST",   "path": "/team-invites/{inviteId:alphanum}/accept",    "handler": "Plugins\\Teams\\Infrastructure\\Http\\Controllers\\InviteController@accept",       "name": "teams.invites.accept" },
+        { "method": "POST",   "path": "/team-invites/{inviteId:alphanum}/decline",   "handler": "Plugins\\Teams\\Infrastructure\\Http\\Controllers\\InviteController@decline",      "name": "teams.invites.decline" }
+    ],
+
+    "emits": [
+        "team.created", "team.deleted",
+        "team.member.added", "team.member.removed", "team.member.roles_changed",
+        "team.invite.created", "team.invite.accepted", "team.invite.declined", "team.invite.revoked"
+    ],
+    "listens": [],
+
+    "documentation": "Teams, memberships with roles, invites and per-team preferences. It has no permission system of its own: a member's team roles are handed to hkm-plugin-authorization as `team:<role>` and that plugin's policy decides. See the README for how a role reaches a decision.",
+
+    "config": [
+        { "key": "TEAMS_INVITE_TTL_SECONDS", "type": "int", "required": false, "default": 604800 },
+        { "key": "TEAMS_MAX_PREFS_BYTES", "type": "int", "required": false, "default": 16384 },
+        { "key": "TEAMS_INVITE_REQUIRE_EMAIL_MATCH", "type": "bool", "required": false, "default": true }
+    ]
+}
